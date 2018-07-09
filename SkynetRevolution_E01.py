@@ -1,5 +1,6 @@
 import sys
 import math
+import collections
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
@@ -21,33 +22,24 @@ for i in range(e):
 	ei = int(input())  # the index of a gateway node
 	gateways.append(ei)
 
-#function to find all paths
-def find_all_paths(graph, start, end, path=[]):
-	path = path + [start]
-	if start == end:
-	    return [path]
-	paths = []
-	for node in graph[start]:
-	    if node not in path:
-	        newpaths = find_all_paths(graph, node, end, path)
-	        for newpath in newpaths:
-	            paths.append(newpath)
-	return paths
+#root connected to all gateways
+#graph[-1] = gateways
+
+#BFS Search -> returns tuple with (agent position, node of closest path to gateway)
+def block_agent(graph, root, goal):
+	visited, queue = set(), collections.deque(root)
+	while queue: 
+		vertex = queue.popleft()
+		for neighbour in graph[vertex]: 
+			if neighbour not in visited: 
+				if neighbour == goal:
+					return (vertex, goal)
+				visited.add(neighbour) 
+				queue.append(neighbour) 
+
 # game loop
 while True:
 	si = int(input())  # The index of the node on which the Skynet agent is positioned this turn
-
-	#find shortest path from Skynet Agent to every gateway
-	path_list = []
-	for g in gateways:
-		path = min(find_all_paths(graph, si, g),key=len)
-		path_list.append(path)
-
-	#take shortest path from shortest paths
-	path = min(path_list,key=len)
-
-	s0 = path[0]
-	s1 = path[1]
-
+	s0, s1 = block_agent(graph, gateways, si)
 	# Example: 0 1 are the indices of the nodes you wish to sever the link between
 	print(f"{s0} {s1}")
