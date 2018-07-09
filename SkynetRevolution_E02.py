@@ -47,11 +47,6 @@ def dij_paths(graph, agent_pos, goals):
             current = sorted(unvisited, key=lambda x: distances[x])[0]
 
     return paths, distances
-    #answer = []
-    #for i in goals:
-    #    if i in path.keys():
-    #        answer.append(path[i])
-    #return answer
 
 # Select path to block
 def select_path(graph, paths, distances, gateways):
@@ -59,18 +54,30 @@ def select_path(graph, paths, distances, gateways):
         if distances[i] == 1:
             return paths[i][0], paths[i][1]
 
-    danger_nodes = set()
+    double_nodes = set()
     for i in gateways:
         neighbours = graph[i]
         for j in neighbours:
             danger = graph[j] & gateways
-            if len(danger) >=2: danger_nodes.add(j) 
-    print(f'danger nodes: {danger_nodes}', file=sys.stderr)
+            if len(danger) >=2: double_nodes.add(j) 
+    print(f'double nodes: {double_nodes}', file=sys.stderr)
 
-    if danger_nodes:
-        candidates = {x:distances[x] for x in danger_nodes}
-        print(f'candidates: {candidates}', file=sys.stderr)
-        node = min(candidates,key=candidates.get)
+    danger_nodes = set()
+    for i in gateways:
+    	danger_nodes.update(graph[i])
+    print(f'danger nodes: {danger_nodes}', file=sys.stderr)
+    if double_nodes:
+        # Clear path: the nodes on the shortest path that are node danger nodes
+        clear_path = {}
+        for i in double_nodes:
+            clear_path[i] = []
+            for j in paths[i]:
+                if j not in danger_nodes:
+                    clear_path[i].append(j) 
+
+        #candidates = {x:distances[x] for x in double_nodes}
+        print(f'clear_path: {clear_path}', file=sys.stderr)
+        node = min(clear_path,key=lambda x: len(clear_path[x]))
         print(f'node:{node}', file=sys.stderr)
         s0 = node
         s1 = list(graph[node] & gateways)[0]
