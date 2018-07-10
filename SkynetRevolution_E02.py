@@ -19,9 +19,7 @@ for i in range(e):
     ei = int(input())  # the index of a gateway node
     gateways.add(ei)
 
-# Dijkstra's Algorithm for unweighted graph: returns paths to gateways
-
-
+# Dijkstra's Algorithm with binnary weight: returns paths to gateways
 def dij_paths(graph, agent_pos, goals, danger_nodes, preference=0.1):
     distances = {}
     for i in graph.keys():
