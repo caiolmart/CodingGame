@@ -71,7 +71,7 @@ pos = where('@')[0]
 print(f'Initial Position: {pos}', file=sys.stderr)
 posf = where('$')[0]
 print(f'Suicide Position: {posf}', file=sys.stderr)
-backtrack = set()
+backtrack = []
 loop_check = []
 
 print(len(MOVING), file=sys.stderr)
@@ -83,7 +83,7 @@ while pos != posf:
         m = MOVES[MOVING]
         if (pos[0], pos[1], STATE, BREAKER, MOVING) in backtrack:
             print('LOOP')
-        backtrack.add((pos[0], pos[1], MOVING, STATE, BREAKER))
+        backtrack.append((pos[0], pos[1], MOVING, STATE, BREAKER))
         #print(backtrack, file=sys.stderr)
         pos[0] += m[0]
         pos[1] += m[1]
@@ -108,7 +108,7 @@ while pos != posf:
                 print('LOOP')
                 sys.exit()
             MOVING = p
-            backtrack.add((pos[0], pos[1], MOVING, STATE, BREAKER))
+            backtrack.append((pos[0], pos[1], MOVING, STATE, BREAKER))
             #print(backtrack[-1][2])
             pos[0] += m[0]
             pos[1] += m[1]
