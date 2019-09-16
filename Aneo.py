@@ -3,7 +3,7 @@ import math
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
-speed = int(input()) / 3.6
+speed = int(input())
 #print('a', speed * 3.6)
 #print('a', speed)
 light_count = int(input())
@@ -13,12 +13,14 @@ for i in range(light_count):
     #print((distance, duration))
     inputs.append((distance, duration))
 
+
+
 def get_speed_range(distance, duration, i):
     if i > 0:
-        max_speed = distance / (2 * i * duration)
+        max_speed = (distance / (2 * i * duration)) * 3.6
     else:
         max_speed = speed
-    min_speed = distance / ((2 * i + 1) * duration)
+    min_speed = (distance / ((2 * i + 1) * duration)) * 3.6
     if max_speed > speed:
         max_speed = speed
     if min_speed >= speed:
@@ -29,7 +31,7 @@ def get_speed_range(distance, duration, i):
 def merge_ranges(min_speed1, max_speed1, min_speed2, max_speed2):
     min_speed = max(min_speed1, min_speed2)
     max_speed = min(max_speed1, max_speed2)
-    if min_speed > max_speed:
+    if min_speed > max_speed or int(max_speed) < min_speed:
         min_speed, max_speed = None, None
     return min_speed, max_speed
 
@@ -93,4 +95,4 @@ def solve():
             passed_all = True
     return max_speeds[light - 1]
 
-print(int(solve() * 3.6))
+print(int(solve()))
